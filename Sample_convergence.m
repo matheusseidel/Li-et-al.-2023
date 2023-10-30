@@ -49,7 +49,7 @@ load('C:\Users\Matheus Seidel\OneDrive\Doutorado\1_Data\Li et al. 2023\Convergen
 
 %% Step 2: Define Control Parameters
 
-ncycle = 12;      % number of oscillation cycles to consider (max 24)
+ncycle = 1:16;      % number of oscillation cycles to consider (max 24)
 
 sf = 1;         % sample every sf snapshot
 dt = sf*1e-5;   % uniform inter-snapshot time step (1e-5 is 10x the CFD time step)
