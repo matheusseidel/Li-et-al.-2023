@@ -1,22 +1,3 @@
-# ----------------------------------------------------------- #
-#                            DMD                              #
-# ----------------------------------------------------------- #
-
-# Author:               Matheus Seidel (matheus.seidel@coc.ufrj.br)
-# Revision:             04
-# Last update:          11/07/2023
-
-# Description:
-'''  
-This code performs the Dynamic Mode Decomposition on fluid simulation data. It uses the PyDMD library to  to generate the DMD modes
-and reconstruct the approximation of the original simulation.
-The mesh is read by meshio library using vtk files. The simulation data is in h5 format and is read using h5py.
-Details about DMD can be found in:
-Schmid, P. J., "Dynamic Mode Decomposition of Numerical and Experimental Data". JFM, Vol. 656, Aug. 2010,pp. 5–28. 
-doi:10.1017/S0022112010001217
-'''
-
-# Last update
 '''
 Replicate Li et al.
 '''
@@ -34,7 +15,6 @@ import time
 
 start_time = time.time()
 
-#r = 100                # SVD rank
 dt = 1e-5              # time step value
 
 # ----------------------- Function--------------------------- #
@@ -64,28 +44,21 @@ def read_h5_libmesh(filename, dataset):
 # ----------------- Reading pressure data ------------------- #
 
 n_max = 16               # Number of cycles
-#r = 10
-#ti = 1
-#tf = 15001
 
 ncycles = np.arange(1, n_max + 1)
 grandmean = np.zeros(n_max)
 
-#n = 23401                              # number of nodes
-#m = tf - ti                            # number of timesteps
+snapshots_p = read_h5_libmesh('Midplane_xy_Vm_25_cycles_nointerp.mat', 'Vm_all')
 
-#snapshots_p = read_h5_libmesh('Midplane_xy_Vm_25_cycles_nointerp.mat', 'Vm_all')
+snapshots_p = np.transpose(snapshots_p)
 
-#snapshots_p = np.transpose(snapshots_p)
-
-#print(f'Pressure snapshots matrix: {snapshots_p.shape}')
-#print()
+print(f'Pressure snapshots matrix: {snapshots_p.shape}')
+print()
 
 Start_frame = 120080
 Cycle_frame = np.array([121000, 121928, 122808, 123775, 124737, 125695, 126613, 127582, 128599, 129505, 130549, 131559, 132541, 133637, 134581, 135546, 136552, 137621, 138638, 139595, 140539, 141469, 142494, 143480])
 
-#for N in range(0, n_max):
-for N in range(12, 13):
+for N in range(0, n_max):
 
     print()
     print(f'Running cycle {N + 1}')
@@ -96,13 +69,6 @@ for N in range(12, 13):
         log.write('\n')  
 
     End_frame = Cycle_frame[N]
-
-    snapshots_p = read_h5_libmesh('C:/Users/Matheus Seidel/OneDrive/Doutorado/1_Data/Li et al. 2023/Convergence Test/Midplane_xy_Vm_25_cycles_nointerp.mat', 'Vm_all')
-
-    snapshots_p = np.transpose(snapshots_p)
-
-    print(f'Pressure snapshots matrix: {snapshots_p.shape}')
-    print()
 
     with open(f'C:/Users/Matheus Seidel/OneDrive/Doutorado/3_Outputs/Li et al. 2023/Validation/Log_N_{N + 1}.txt', 'a') as log:
         snapshots_p_str = str(snapshots_p)
